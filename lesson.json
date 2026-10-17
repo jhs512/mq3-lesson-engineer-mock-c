@@ -1,0 +1,1513 @@
+{
+  "schema_version": 1,
+  "id": "engineer-mock-c",
+  "revision": "v1.0.0",
+  "title": "자체 실전 모의 C·취약 영역 재검사",
+  "description": "직접 만든 모의고사예요. 공식 문항이 아니에요. 앞에서 틀리기 쉬운 곳을 새 코드와 새 숫자로 다시 물어요. 20문항, 문항마다 5점이고 힌트는 없어요. 150분을 직접 재며 실행 없이 답을 적어 제출해요. 공식 합격선은 60점이에요. 필수 문제 20개와 선택 도전 0개예요.",
+  "sources": [
+    "https://www.q-net.or.kr/pageLink.do?link=cst/cstReport&jmCd=1320&mcrtrNo=991",
+    "https://www.q-net.or.kr/pageLink.do?link=cst/cstReport&jmCd=1320&mcrtrNo=1453",
+    "https://owasp.org/www-community/attacks/csrf",
+    "https://www.rfc-editor.org/rfc/rfc950",
+    "https://www.rfc-editor.org/rfc/rfc4632",
+    "https://docs.python.org/3/tutorial/controlflow.html#default-argument-values",
+    "https://docs.oracle.com/javase/specs/jls/se25/html/jls-8.html#jls-8.4.8",
+    "https://www.sqlite.org/nulls.html"
+  ],
+  "sections": [],
+  "review_enabled": false,
+  "tasks": [
+    {
+      "id": "q01",
+      "title": "문항 1 · 5점 · C 함수 포인터",
+      "goal": "자, 시계를 150분에 맞추고 시작하세요. 문항마다 5점이에요.\n다음 C 프로그램의 출력을 적으세요.\n\n실행하지 말고 손으로 따라가요.\n두 줄을 차례로 적으세요.\n\n```c\n#include <stdio.h>\n\nint inc(int x) {\n    return x + 4;\n}\n\nint dec(int x) {\n    return x - 1;\n}\n\nint triple(int x) {\n    return x * 3;\n}\n\nint repeat(int (*f)(int), int x, int n) {\n    while (n > 0) {\n        x = f(x);\n        n--;\n    }\n    return x;\n}\n\nint main(void) {\n    int (*table[3])(int) = {inc, dec, triple};\n    int v = 5;\n    v = repeat(table[1], v, 3);\n    v = repeat(table[v], v, 2);\n    printf(\"%d\\n\", v);\n    printf(\"%d\\n\", table[0](table[v % 3](v)));\n    return 0;\n}\n```",
+      "language": "answer",
+      "entry_file": "answer.txt",
+      "starter_code": "?\n",
+      "solution": "18\n26\n",
+      "files": {},
+      "tests": [
+        {
+          "input": "",
+          "expected": "18\n26"
+        }
+      ],
+      "web_checks": [],
+      "git_checks": null,
+      "required": true,
+      "hints": [],
+      "narration": [
+        {
+          "action": "set_code",
+          "code": "?\n",
+          "say": "준비 코드를 먼저 실행해 볼게요."
+        },
+        {
+          "action": "run",
+          "expected_failure": false
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. ?"
+        },
+        {
+          "action": "say",
+          "target": "editor",
+          "text": "조심하세요. `repeat`가 함수를 n번 부르는 걸 놓치면 값이 크게 달라져요."
+        },
+        {
+          "action": "patch_code",
+          "before": "?",
+          "after": "18\n26",
+          "say": "작은 부분을 바꿔 원리를 확인해요."
+        },
+        {
+          "action": "run"
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. 18 / 26"
+        },
+        {
+          "action": "submit"
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "title": "문항 2 · 5점 · 라운드 로빈 대기 시간",
+      "goal": "프로세스 네 개를 라운드 로빈(RR)으로 처리해요. 시간 할당량은 3이에요.\n도착한 순서대로 준비 큐에 서요. 할당량을 다 쓰면 큐 맨 뒤로 가요.\n도착과 할당량 끝이 같은 시각에 겹치는 일은 없어요.\n\n| 프로세스 | 도착 시각 | 실행 시간 |\n|---|---|---|\n| P1 | 0 | 8 |\n| P2 | 1 | 3 |\n| P3 | 2 | 5 |\n| P4 | 4 | 2 |\n\n평균 대기 시간을 숫자만 적으세요.\n반환 시간은 끝난 시각에서 도착 시각을 뺀 값이에요.\n대기 시간은 반환 시간에서 실행 시간을 뺀 값이에요.",
+      "language": "answer",
+      "entry_file": "answer.txt",
+      "starter_code": "?\n",
+      "solution": "7.25\n",
+      "files": {},
+      "tests": [
+        {
+          "input": "",
+          "expected": "7.25"
+        }
+      ],
+      "web_checks": [],
+      "git_checks": null,
+      "required": true,
+      "hints": [],
+      "narration": [
+        {
+          "action": "set_code",
+          "code": "?\n",
+          "say": "준비 코드를 먼저 실행해 볼게요."
+        },
+        {
+          "action": "run",
+          "expected_failure": false
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. ?"
+        },
+        {
+          "action": "say",
+          "target": "editor",
+          "text": "조심하세요. 처음 실행된 시각만 보고 대기 시간을 재면 답이 작아져요."
+        },
+        {
+          "action": "patch_code",
+          "before": "?",
+          "after": "7.25",
+          "say": "작은 부분을 바꿔 원리를 확인해요."
+        },
+        {
+          "action": "run"
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. 7.25"
+        },
+        {
+          "action": "submit"
+        }
+      ]
+    },
+    {
+      "id": "q03",
+      "title": "문항 3 · 5점 · 자바 static 메서드 가리기",
+      "goal": "static 메서드는 객체가 아니라 클래스에 붙어요.\n자식이 같은 이름으로 또 만들어도 오버라이딩되지 않아요.\n변수로 부르면 변수 자료형 쪽 메서드가 불려요.\n메서드 안에서 이름만 쓰면 그 줄이 있는 클래스 쪽이 불려요.\nstatic이 없는 메서드는 오버라이딩되면 실제 객체 쪽이 불리고요.\n`super.`를 붙여 부르면 부모 쪽이 불리죠.\n다음 자바 프로그램의 출력을 적으세요.\n\n실행하지 말고 세 줄을 차례로 적으세요.\n\n```java\nclass Shop {\n    static String kind() {\n        return \"A\";\n    }\n\n    String item() {\n        return \"1\";\n    }\n\n    String label() {\n        return kind() + item();\n    }\n}\n\nclass Cafe extends Shop {\n    static String kind() {\n        return \"B\";\n    }\n\n    String item() {\n        return \"2\";\n    }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        Shop a = new Cafe();\n        Cafe b = new Cafe();\n        System.out.println(a.kind() + a.item());\n        System.out.println(a.label() + b.label());\n        System.out.println(b.kind() + ((Shop) b).kind());\n    }\n}\n```",
+      "language": "answer",
+      "entry_file": "answer.txt",
+      "starter_code": "?\n",
+      "solution": "A2\nA2A2\nBA\n",
+      "files": {},
+      "tests": [
+        {
+          "input": "",
+          "expected": "a2\na2a2\nba"
+        }
+      ],
+      "web_checks": [],
+      "git_checks": null,
+      "required": true,
+      "hints": [],
+      "narration": [
+        {
+          "action": "set_code",
+          "code": "?\n",
+          "say": "준비 코드를 먼저 실행해 볼게요."
+        },
+        {
+          "action": "run",
+          "expected_failure": false
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. ?"
+        },
+        {
+          "action": "say",
+          "target": "editor",
+          "text": "조심하세요. static 메서드도 실제 객체를 따라간다고 보면 첫 두 줄이 틀려요."
+        },
+        {
+          "action": "patch_code",
+          "before": "?",
+          "after": "A2\nA2A2\nBA",
+          "say": "작은 부분을 바꿔 원리를 확인해요."
+        },
+        {
+          "action": "run"
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. a2 / a2a2 / ba"
+        },
+        {
+          "action": "submit"
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "title": "문항 4 · 5점 · SQL 외부 조인의 조건 위치",
+      "goal": "회원마다 2026년 주문 수를 cnt로 보여 주는 SQL이에요.\n2026년 주문이 없는 회원도 cnt 0으로 나와야 해요.\n표는 `member(id, name)`와 `orders(id, member_id, year)`예요.\n\n지금 답안은 실행되지만 요구와 달라요. 고쳐서 제출하세요.\n열 이름과 정렬(회원 id 순)은 그대로 둬요.\n채점은 다른 회원·주문 자료로도 다시 해요.",
+      "language": "sql",
+      "entry_file": "main.sql",
+      "starter_code": "-- 여기에 답안 SQL을 작성하세요.\n-- 회원마다 이름과 2026년 주문 수(cnt)를 보여 줘요.\nSELECT m.name, COUNT(o.id) AS cnt\nFROM member m\n-- 주문이 없는 회원도 남기려고 LEFT JOIN을 써요.\n-- 2026년 주문만 세려는 조건도 함께 적었어요.\nLEFT JOIN orders o ON o.member_id = m.id\nWHERE o.year = 2026\n-- 회원마다 한 줄로 묶고, 회원 id 순으로 보여 줘요.\nGROUP BY m.id, m.name\nORDER BY m.id;\n",
+      "solution": "-- 여기에 답안 SQL을 작성하세요.\n-- 회원마다 이름과 2026년 주문 수(cnt)를 보여 줘요.\nSELECT m.name, COUNT(o.id) AS cnt\nFROM member m\n-- 주문이 없는 회원도 남기려고 LEFT JOIN을 써요.\n-- 2026년 주문만 세려는 조건도 함께 적었어요.\nLEFT JOIN orders o ON o.member_id = m.id AND o.year = 2026\n-- 회원마다 한 줄로 묶고, 회원 id 순으로 보여 줘요.\nGROUP BY m.id, m.name\nORDER BY m.id;\n",
+      "files": {
+        "setup.sql": "CREATE TABLE member (id INTEGER PRIMARY KEY, name TEXT);\nINSERT INTO member (id, name) VALUES (1, '하준');\nINSERT INTO member (id, name) VALUES (2, '서윤');\nINSERT INTO member (id, name) VALUES (3, '도윤');\nINSERT INTO member (id, name) VALUES (4, '지아');\nINSERT INTO member (id, name) VALUES (5, '시우');\nCREATE TABLE orders (id INTEGER PRIMARY KEY, member_id INTEGER, year INTEGER);\nINSERT INTO orders (id, member_id, year) VALUES (1, 1, 2026);\nINSERT INTO orders (id, member_id, year) VALUES (2, 1, 2025);\nINSERT INTO orders (id, member_id, year) VALUES (3, 1, 2026);\nINSERT INTO orders (id, member_id, year) VALUES (4, 2, 2025);\nINSERT INTO orders (id, member_id, year) VALUES (5, 3, 2026);\nINSERT INTO orders (id, member_id, year) VALUES (6, 5, 2025);\nINSERT INTO orders (id, member_id, year) VALUES (7, 5, 2025);\nINSERT INTO orders (id, member_id, year) VALUES (8, 3, 2025);\n"
+      },
+      "tests": [
+        {
+          "input": "",
+          "expected": "name | cnt\n하준 | 2\n서윤 | 0\n도윤 | 1\n지아 | 0\n시우 | 0"
+        }
+      ],
+      "web_checks": [],
+      "git_checks": null,
+      "required": true,
+      "hints": [],
+      "narration": [
+        {
+          "action": "set_code",
+          "code": "-- 여기에 답안 SQL을 작성하세요.\n-- 회원마다 이름과 2026년 주문 수(cnt)를 보여 줘요.\nSELECT m.name, COUNT(o.id) AS cnt\nFROM member m\n-- 주문이 없는 회원도 남기려고 LEFT JOIN을 써요.\n-- 2026년 주문만 세려는 조건도 함께 적었어요.\nLEFT JOIN orders o ON o.member_id = m.id\nWHERE o.year = 2026\n-- 회원마다 한 줄로 묶고, 회원 id 순으로 보여 줘요.\nGROUP BY m.id, m.name\nORDER BY m.id;\n",
+          "say": "준비 코드를 먼저 실행해 볼게요."
+        },
+        {
+          "action": "run",
+          "expected_failure": false
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. name | cnt / 하준 | 2 / 도윤 | 1"
+        },
+        {
+          "action": "say",
+          "target": "editor",
+          "text": "조심하세요. 2026년 조건을 WHERE에 두면 그해 주문이 없는 회원이 사라져요."
+        },
+        {
+          "action": "patch_code",
+          "before": "LEFT JOIN orders o ON o.member_id = m.id\nWHERE o.year = 2026",
+          "after": "LEFT JOIN orders o ON o.member_id = m.id AND o.year = 2026",
+          "say": "작은 부분을 바꿔 원리를 확인해요."
+        },
+        {
+          "action": "run"
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. 윤 | 0 / 도윤 | 1 / 지아 | 0 / 시우 | 0"
+        },
+        {
+          "action": "submit"
+        }
+      ],
+      "variations": [
+        {
+          "values": {
+            "setup": "CREATE TABLE member (id INTEGER PRIMARY KEY, name TEXT);\nINSERT INTO member (id, name) VALUES (1, '민서');\nINSERT INTO member (id, name) VALUES (2, '예준');\nINSERT INTO member (id, name) VALUES (3, '채원');\nINSERT INTO member (id, name) VALUES (4, '주원');\nCREATE TABLE orders (id INTEGER PRIMARY KEY, member_id INTEGER, year INTEGER);\nINSERT INTO orders (id, member_id, year) VALUES (1, 2, 2026);\nINSERT INTO orders (id, member_id, year) VALUES (2, 2, 2026);\nINSERT INTO orders (id, member_id, year) VALUES (3, 2, 2026);\nINSERT INTO orders (id, member_id, year) VALUES (4, 4, 2025);\nINSERT INTO orders (id, member_id, year) VALUES (5, 1, 2024);\nINSERT INTO orders (id, member_id, year) VALUES (6, 3, 2026);\n"
+          },
+          "expected": "name | cnt\n민서 | 0\n예준 | 3\n채원 | 1\n주원 | 0"
+        },
+        {
+          "values": {
+            "setup": "CREATE TABLE member (id INTEGER PRIMARY KEY, name TEXT);\nINSERT INTO member (id, name) VALUES (1, '유진');\nINSERT INTO member (id, name) VALUES (2, '건우');\nINSERT INTO member (id, name) VALUES (3, '수아');\nINSERT INTO member (id, name) VALUES (4, '현우');\nINSERT INTO member (id, name) VALUES (5, '다인');\nINSERT INTO member (id, name) VALUES (6, '은호');\nCREATE TABLE orders (id INTEGER PRIMARY KEY, member_id INTEGER, year INTEGER);\nINSERT INTO orders (id, member_id, year) VALUES (1, 6, 2026);\nINSERT INTO orders (id, member_id, year) VALUES (2, 6, 2025);\nINSERT INTO orders (id, member_id, year) VALUES (3, 4, 2026);\nINSERT INTO orders (id, member_id, year) VALUES (4, 4, 2026);\nINSERT INTO orders (id, member_id, year) VALUES (5, 1, 2027);\nINSERT INTO orders (id, member_id, year) VALUES (6, 2, 2026);\n"
+          },
+          "expected": "name | cnt\n유진 | 0\n건우 | 1\n수아 | 0\n현우 | 2\n다인 | 0\n은호 | 1"
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "title": "문항 5 · 5점 · 경계값 분석",
+      "goal": "단체 예약은 2명부터 12명까지만 받아요.\n경계값 분석(Boundary Value Analysis)을 써요.\n이 기법으로 테스트 입력을 골라요.\n\n이번엔 경계값과 그 바로 바깥 값만 골라요.\n바로 안쪽 값은 고르지 않아요.\n작은 수부터 쉼표로 나눠 적으세요.",
+      "language": "answer",
+      "entry_file": "answer.txt",
+      "starter_code": "?\n",
+      "solution": "1, 2, 12, 13\n",
+      "files": {},
+      "tests": [
+        {
+          "input": "",
+          "expected": "1, 2, 12, 13"
+        },
+        {
+          "input": "",
+          "expected": "1,2,12,13"
+        },
+        {
+          "input": "",
+          "expected": "1 2 12 13"
+        }
+      ],
+      "web_checks": [],
+      "git_checks": null,
+      "required": true,
+      "hints": [],
+      "narration": [
+        {
+          "action": "set_code",
+          "code": "?\n",
+          "say": "준비 코드를 먼저 실행해 볼게요."
+        },
+        {
+          "action": "run",
+          "expected_failure": false
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. ?"
+        },
+        {
+          "action": "say",
+          "target": "editor",
+          "text": "조심하세요. 경계값만 고르고 바로 바깥 값을 빼면 오답이에요."
+        },
+        {
+          "action": "patch_code",
+          "before": "?",
+          "after": "1, 2, 12, 13",
+          "say": "작은 부분을 바꿔 원리를 확인해요."
+        },
+        {
+          "action": "run"
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. 1, 2, 12, 13"
+        },
+        {
+          "action": "submit"
+        }
+      ]
+    },
+    {
+      "id": "q06",
+      "title": "문항 6 · 5점 · 파이썬 기본값 리스트",
+      "goal": "`log=[]`처럼 매개변수에 기본값을 줄 수 있어요.\n인자를 안 주면 그 기본값을 써요.\n기본값은 함수를 만들 때 한 번만 생겨요.\n다음 파이썬 프로그램의 출력을 적으세요.\n\n실행하지 말고 두 줄을 차례로 적으세요.\n\n```python\ndef stamp(day, log=[]):\n    log.append(day)\n    return log\n\n\nfirst = stamp(3)\nsecond = stamp(5, [])\nthird = stamp(7)\nprint(len(first), len(second), len(third))\nprint(first is third, sum(third))\n```",
+      "language": "answer",
+      "entry_file": "answer.txt",
+      "starter_code": "?\n",
+      "solution": "2 1 2\nTrue 10\n",
+      "files": {},
+      "tests": [
+        {
+          "input": "",
+          "expected": "2 1 2\ntrue 10"
+        }
+      ],
+      "web_checks": [],
+      "git_checks": null,
+      "required": true,
+      "hints": [],
+      "narration": [
+        {
+          "action": "set_code",
+          "code": "?\n",
+          "say": "준비 코드를 먼저 실행해 볼게요."
+        },
+        {
+          "action": "run",
+          "expected_failure": false
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. ?"
+        },
+        {
+          "action": "say",
+          "target": "editor",
+          "text": "조심하세요. 부를 때마다 새 리스트가 생긴다고 보면 길이를 잘못 세요."
+        },
+        {
+          "action": "patch_code",
+          "before": "?",
+          "after": "2 1 2\nTrue 10",
+          "say": "작은 부분을 바꿔 원리를 확인해요."
+        },
+        {
+          "action": "run"
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. 2 1 2 / true 10"
+        },
+        {
+          "action": "submit"
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "title": "문항 7 · 5점 · 웹 공격 이름",
+      "goal": "다음 설명에 맞는 웹 공격 이름을 적으세요.\n사용자는 어느 쇼핑몰에 로그인해 있어요.\n공격자가 꾸민 링크를 열자, 그 쇼핑몰로 주문 요청이 가요.\n사용자는 모르는 요청이에요. 사이트는 정상 요청으로 받아요.\n\n영문 약자나 한국어 이름 중 하나로 적으세요.",
+      "language": "answer",
+      "entry_file": "answer.txt",
+      "starter_code": "?\n",
+      "solution": "CSRF\n",
+      "files": {},
+      "tests": [
+        {
+          "input": "",
+          "expected": "csrf"
+        },
+        {
+          "input": "",
+          "expected": "xsrf"
+        },
+        {
+          "input": "",
+          "expected": "사이트간요청위조"
+        },
+        {
+          "input": "",
+          "expected": "크로스사이트요청위조"
+        },
+        {
+          "input": "",
+          "expected": "cross-site request forgery"
+        },
+        {
+          "input": "",
+          "expected": "cross-site requestforgery"
+        },
+        {
+          "input": "",
+          "expected": "cross-siterequest forgery"
+        },
+        {
+          "input": "",
+          "expected": "cross-siterequestforgery"
+        },
+        {
+          "input": "",
+          "expected": "cross site request forgery"
+        },
+        {
+          "input": "",
+          "expected": "cross site requestforgery"
+        },
+        {
+          "input": "",
+          "expected": "cross siterequest forgery"
+        },
+        {
+          "input": "",
+          "expected": "cross siterequestforgery"
+        },
+        {
+          "input": "",
+          "expected": "crosssite request forgery"
+        },
+        {
+          "input": "",
+          "expected": "crosssite requestforgery"
+        },
+        {
+          "input": "",
+          "expected": "crosssiterequest forgery"
+        },
+        {
+          "input": "",
+          "expected": "crosssiterequestforgery"
+        }
+      ],
+      "web_checks": [],
+      "git_checks": null,
+      "required": true,
+      "hints": [],
+      "narration": [
+        {
+          "action": "set_code",
+          "code": "?\n",
+          "say": "준비 코드를 먼저 실행해 볼게요."
+        },
+        {
+          "action": "run",
+          "expected_failure": false
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. ?"
+        },
+        {
+          "action": "say",
+          "target": "editor",
+          "text": "조심하세요. XSS는 브라우저에서 공격 스크립트가 도는 공격이라 달라요."
+        },
+        {
+          "action": "patch_code",
+          "before": "?",
+          "after": "CSRF",
+          "say": "작은 부분을 바꿔 원리를 확인해요."
+        },
+        {
+          "action": "run"
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. csrf"
+        },
+        {
+          "action": "submit"
+        }
+      ]
+    },
+    {
+      "id": "q08",
+      "title": "문항 8 · 5점 · 서브넷 계산",
+      "goal": "어느 PC의 IPv4 주소가 `10.86.203.150/21`이에요.\n/21은 앞 21비트가 네트워크 부분이라는 뜻이에요.\n\n네 줄을 차례로 적으세요.\n① 서브넷 마스크(점 표기)\n② 네트워크 주소\n③ 브로드캐스트 주소\n④ 호스트에 줄 수 있는 주소 수(숫자만)",
+      "language": "answer",
+      "entry_file": "answer.txt",
+      "starter_code": "① ?\n② ?\n③ ?\n④ ?\n",
+      "solution": "① 255.255.248.0\n② 10.86.200.0\n③ 10.86.207.255\n④ 2046\n",
+      "files": {},
+      "tests": [
+        {
+          "input": "",
+          "expected": "255.255.248.0\n10.86.200.0\n10.86.207.255\n2046"
+        },
+        {
+          "input": "",
+          "expected": "255.255.248.0\n10.86.200.0\n10.86.207.255\n2046개"
+        },
+        {
+          "input": "",
+          "expected": "255.255.248.0\n10.86.200.0/21\n10.86.207.255\n2046"
+        },
+        {
+          "input": "",
+          "expected": "255.255.248.0\n10.86.200.0/21\n10.86.207.255\n2046개"
+        }
+      ],
+      "web_checks": [],
+      "git_checks": null,
+      "required": true,
+      "hints": [],
+      "narration": [
+        {
+          "action": "set_code",
+          "code": "① ?\n② ?\n③ ?\n④ ?\n",
+          "say": "준비 코드를 먼저 실행해 볼게요."
+        },
+        {
+          "action": "run",
+          "expected_failure": false
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. ? / ? / ? / ?"
+        },
+        {
+          "action": "say",
+          "target": "editor",
+          "text": "조심하세요. 네트워크와 브로드캐스트 주소 2개를 안 빼면 호스트 수가 틀려요."
+        },
+        {
+          "action": "patch_code",
+          "before": "① ?\n② ?\n③ ?\n④ ?",
+          "after": "① 255.255.248.0\n② 10.86.200.0\n③ 10.86.207.255\n④ 2046",
+          "say": "작은 부분을 바꿔 원리를 확인해요."
+        },
+        {
+          "action": "run"
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. .86.200.0 / 10.86.207.255 / 2046"
+        },
+        {
+          "action": "submit"
+        }
+      ]
+    },
+    {
+      "id": "q09",
+      "title": "문항 9 · 5점 · 자바 필드 가리기와 오버라이딩",
+      "goal": "자식에 부모와 같은 이름의 필드를 또 만들면 필드가 두 개 생겨요.\n필드는 오버라이딩되지 않아요. 메서드 안의 v는 그 메서드가 있는 클래스 쪽이에요.\n밖에서 `x.v`처럼 읽으면 변수 자료형 쪽 필드예요.\n다음 자바 프로그램의 출력을 적으세요.\n\n실행하지 말고 네 줄을 차례로 적으세요.\n\n```java\nclass Base {\n    int v = 10;\n\n    void show() {\n        System.out.println(\"B\" + v);\n    }\n\n    void run() {\n        show();\n        System.out.println(v);\n    }\n}\n\nclass Sub extends Base {\n    int v = 20;\n\n    void show() {\n        System.out.println(\"S\" + v);\n        super.show();\n    }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        Base x = new Sub();\n        x.run();\n        System.out.println(x.v + ((Sub) x).v);\n    }\n}\n```",
+      "language": "answer",
+      "entry_file": "answer.txt",
+      "starter_code": "?\n",
+      "solution": "S20\nB10\n10\n30\n",
+      "files": {},
+      "tests": [
+        {
+          "input": "",
+          "expected": "s20\nb10\n10\n30"
+        }
+      ],
+      "web_checks": [],
+      "git_checks": null,
+      "required": true,
+      "hints": [],
+      "narration": [
+        {
+          "action": "set_code",
+          "code": "?\n",
+          "say": "준비 코드를 먼저 실행해 볼게요."
+        },
+        {
+          "action": "run",
+          "expected_failure": false
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. ?"
+        },
+        {
+          "action": "say",
+          "target": "editor",
+          "text": "조심하세요. 필드도 실제 객체를 따라간다고 보면 B20과 20을 잘못 적어요."
+        },
+        {
+          "action": "patch_code",
+          "before": "?",
+          "after": "S20\nB10\n10\n30",
+          "say": "작은 부분을 바꿔 원리를 확인해요."
+        },
+        {
+          "action": "run"
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. s20 / b10 / 10 / 30"
+        },
+        {
+          "action": "submit"
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "title": "문항 10 · 5점 · SQL NULL과 외부 조인 결과",
+      "goal": "아래 두 표에 SQL 두 개를 차례로 실행해요.\n표의 NULL은 값이 없다는 뜻이에요.\n\n`club`\n\n| id | name |\n|---|---|\n| 1 | 독서 |\n| 2 | 등산 |\n| 3 | 요리 |\n\n`member`\n\n| id | name | club_id | grade |\n|---|---|---|---|\n| 1 | 가람 | 1 | A |\n| 2 | 나래 | 1 | NULL |\n| 3 | 다온 | 2 | B |\n| 4 | 라온 | NULL | A |\n\n결과 값을 적으세요. 열 이름 줄은 빼도 돼요.\n첫 SELECT의 값 두 개는 한 줄에 공백으로 나눠 적어요.\n둘째 SELECT의 값은 다음 줄에 적어요.\n\n```sql\nSELECT COUNT(*) AS all_rows, COUNT(m.grade) AS graded\nFROM club c\nLEFT JOIN member m ON m.club_id = c.id;\n\nSELECT COUNT(*) AS kept\nFROM club c\nLEFT JOIN member m ON m.club_id = c.id\nWHERE m.grade <> 'B';\n```",
+      "language": "answer",
+      "entry_file": "answer.txt",
+      "starter_code": "?\n",
+      "solution": "all_rows | graded\n4 | 2\n\nkept\n1\n",
+      "files": {},
+      "tests": [
+        {
+          "input": "",
+          "expected": "all_rows | graded\n4 | 2\nkept\n1"
+        },
+        {
+          "input": "",
+          "expected": "4 | 2\n1"
+        },
+        {
+          "input": "",
+          "expected": "4 2\n1"
+        },
+        {
+          "input": "",
+          "expected": "4, 2\n1"
+        },
+        {
+          "input": "",
+          "expected": "4,2\n1"
+        },
+        {
+          "input": "",
+          "expected": "4|2\n1"
+        }
+      ],
+      "web_checks": [],
+      "git_checks": null,
+      "required": true,
+      "hints": [],
+      "narration": [
+        {
+          "action": "set_code",
+          "code": "?\n",
+          "say": "준비 코드를 먼저 실행해 볼게요."
+        },
+        {
+          "action": "run",
+          "expected_failure": false
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. ?"
+        },
+        {
+          "action": "say",
+          "target": "editor",
+          "text": "조심하세요. NULL과 비교한 조건은 참이 아니라서 그 행이 빠져요."
+        },
+        {
+          "action": "patch_code",
+          "before": "?",
+          "after": "all_rows | graded\n4 | 2\n\nkept\n1",
+          "say": "작은 부분을 바꿔 원리를 확인해요."
+        },
+        {
+          "action": "run"
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. rows | graded / 4 | 2 / kept / 1"
+        },
+        {
+          "action": "submit"
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "title": "문항 11 · 5점 · 문장·분기 커버리지",
+      "goal": "아래 C 함수를 세 입력으로 테스트했어요.\n입력 `(age, coupon)`은 `(9, 1)`, `(35, 1)`, `(70, 1)`이에요.\n\n```c\nint fee(int age, int coupon) {\n    int price = 10000;\n    if (age < 13) {\n        price = price / 2;\n    }\n    if (coupon == 1) {\n        price = price - 1000;\n    }\n    return price;\n}\n```\n\n두 줄을 차례로 적으세요. 퍼센트(%)로 적어요.\n① 문장 커버리지\n② 분기(결정) 커버리지",
+      "language": "answer",
+      "entry_file": "answer.txt",
+      "starter_code": "① ?\n② ?\n",
+      "solution": "① 100%\n② 75%\n",
+      "files": {},
+      "tests": [
+        {
+          "input": "",
+          "expected": "100%\n75%"
+        },
+        {
+          "input": "",
+          "expected": "100%\n75"
+        },
+        {
+          "input": "",
+          "expected": "100\n75%"
+        },
+        {
+          "input": "",
+          "expected": "100\n75"
+        }
+      ],
+      "web_checks": [],
+      "git_checks": null,
+      "required": true,
+      "hints": [],
+      "narration": [
+        {
+          "action": "set_code",
+          "code": "① ?\n② ?\n",
+          "say": "준비 코드를 먼저 실행해 볼게요."
+        },
+        {
+          "action": "run",
+          "expected_failure": false
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. ? / ?"
+        },
+        {
+          "action": "say",
+          "target": "editor",
+          "text": "조심하세요. 문장 커버리지가 100%라서 분기도 100%라고 적으면 틀려요."
+        },
+        {
+          "action": "patch_code",
+          "before": "① ?\n② ?",
+          "after": "① 100%\n② 75%",
+          "say": "작은 부분을 바꿔 원리를 확인해요."
+        },
+        {
+          "action": "run"
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. 100% / 75%"
+        },
+        {
+          "action": "submit"
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "title": "문항 12 · 5점 · C 재귀의 호출과 복귀",
+      "goal": "다음 C 프로그램의 출력을 적으세요.\n\n실행하지 말고 두 줄을 차례로 적으세요.\n첫 줄의 숫자는 공백 하나로 나눠 적어요.\n\n```c\n#include <stdio.h>\n\nint down(int n) {\n    if (n <= 0) {\n        return 0;\n    }\n    printf(\"%d \", n);\n    int r = down(n - 2) * 2 + n;\n    printf(\"%d \", r);\n    return r;\n}\n\nint main(void) {\n    int total = down(5);\n    printf(\"\\n%d\\n\", total);\n    return 0;\n}\n```",
+      "language": "answer",
+      "entry_file": "answer.txt",
+      "starter_code": "?\n",
+      "solution": "5 3 1 1 5 15 \n15\n",
+      "files": {},
+      "tests": [
+        {
+          "input": "",
+          "expected": "5 3 1 1 5 15\n15"
+        }
+      ],
+      "web_checks": [],
+      "git_checks": null,
+      "required": true,
+      "hints": [],
+      "narration": [
+        {
+          "action": "set_code",
+          "code": "?\n",
+          "say": "준비 코드를 먼저 실행해 볼게요."
+        },
+        {
+          "action": "run",
+          "expected_failure": false
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. ?"
+        },
+        {
+          "action": "say",
+          "target": "editor",
+          "text": "조심하세요. 돌아오며 찍는 값을 바깥 호출부터 적으면 순서가 뒤집혀요."
+        },
+        {
+          "action": "patch_code",
+          "before": "?",
+          "after": "5 3 1 1 5 15 \n15",
+          "say": "작은 부분을 바꿔 원리를 확인해요."
+        },
+        {
+          "action": "run"
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. 5 3 1 1 5 15 / 15"
+        },
+        {
+          "action": "submit"
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "title": "문항 13 · 5점 · 암호 키 개수",
+      "goal": "사용자 14명이 서로 둘씩 짝지어 비밀 통신을 해요.\n짝마다 다른 키를 써야 다른 사람이 못 읽어요.\n\n필요한 키 수를 두 줄에 숫자만 적으세요.\n① 대칭키 방식: 짝마다 비밀키 하나를 함께 써요.\n② 공개키 방식: 사람마다 공개키와 개인키를 하나씩 가져요.\n공개키 방식은 공개키와 개인키를 모두 세요.",
+      "language": "answer",
+      "entry_file": "answer.txt",
+      "starter_code": "① ?\n② ?\n",
+      "solution": "① 91\n② 28\n",
+      "files": {},
+      "tests": [
+        {
+          "input": "",
+          "expected": "91\n28"
+        },
+        {
+          "input": "",
+          "expected": "91\n28개"
+        },
+        {
+          "input": "",
+          "expected": "91개\n28"
+        },
+        {
+          "input": "",
+          "expected": "91개\n28개"
+        }
+      ],
+      "web_checks": [],
+      "git_checks": null,
+      "required": true,
+      "hints": [],
+      "narration": [
+        {
+          "action": "set_code",
+          "code": "① ?\n② ?\n",
+          "say": "준비 코드를 먼저 실행해 볼게요."
+        },
+        {
+          "action": "run",
+          "expected_failure": false
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. ? / ?"
+        },
+        {
+          "action": "say",
+          "target": "editor",
+          "text": "조심하세요. 대칭키는 사람 수가 아니라 짝의 수만큼 필요해요."
+        },
+        {
+          "action": "patch_code",
+          "before": "① ?\n② ?",
+          "after": "① 91\n② 28",
+          "say": "작은 부분을 바꿔 원리를 확인해요."
+        },
+        {
+          "action": "run"
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. 91 / 28"
+        },
+        {
+          "action": "submit"
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "title": "문항 14 · 5점 · 정규화와 함수 종속",
+      "goal": "수강 표의 기본키는 (학번, 과목코드)예요.\n학과는 학번만 알면 정해져요.\n점수는 학번과 과목코드를 둘 다 알아야 정해져요.\n\n| 학번 | 과목코드 | 점수 | 학과 |\n|---|---|---|---|\n| 101 | DB | 90 | 경영 |\n| 101 | OS | 75 | 경영 |\n| 102 | DB | 82 | 회계 |\n\n두 줄을 차례로 적으세요.\n① 학과처럼 기본키의 일부에만 종속되는 관계의 이름\n② 이 종속을 없애려고 표를 나누면 도달하는 정규형",
+      "language": "answer",
+      "entry_file": "answer.txt",
+      "starter_code": "① ?\n② ?\n",
+      "solution": "① 부분 함수 종속\n② 2NF\n",
+      "files": {},
+      "tests": [
+        {
+          "input": "",
+          "expected": "부분함수종속\n2nf"
+        },
+        {
+          "input": "1",
+          "expected": "부분함수종속"
+        },
+        {
+          "input": "1",
+          "expected": "부분함수적종속"
+        },
+        {
+          "input": "1",
+          "expected": "부분종속"
+        },
+        {
+          "input": "1",
+          "expected": "부분적함수종속"
+        },
+        {
+          "input": "1",
+          "expected": "부분적함수적종속"
+        },
+        {
+          "input": "1",
+          "expected": "부분적종속"
+        },
+        {
+          "input": "1",
+          "expected": "partial functional dependency"
+        },
+        {
+          "input": "1",
+          "expected": "partial functionaldependency"
+        },
+        {
+          "input": "1",
+          "expected": "partialfunctional dependency"
+        },
+        {
+          "input": "1",
+          "expected": "partialfunctionaldependency"
+        },
+        {
+          "input": "2",
+          "expected": "2nf"
+        },
+        {
+          "input": "2",
+          "expected": "제2정규형"
+        },
+        {
+          "input": "2",
+          "expected": "제2 정규형"
+        },
+        {
+          "input": "2",
+          "expected": "제 2 정규형"
+        },
+        {
+          "input": "2",
+          "expected": "제 2정규형"
+        },
+        {
+          "input": "2",
+          "expected": "second normal form"
+        },
+        {
+          "input": "2",
+          "expected": "second normalform"
+        },
+        {
+          "input": "2",
+          "expected": "secondnormal form"
+        },
+        {
+          "input": "2",
+          "expected": "secondnormalform"
+        },
+        {
+          "input": "2",
+          "expected": "제2정규형 (2nf)"
+        },
+        {
+          "input": "2",
+          "expected": "제2정규형(2nf)"
+        },
+        {
+          "input": "2",
+          "expected": "2nf (제2정규형)"
+        },
+        {
+          "input": "2",
+          "expected": "2nf(제2정규형)"
+        }
+      ],
+      "web_checks": [],
+      "git_checks": null,
+      "required": true,
+      "hints": [],
+      "narration": [
+        {
+          "action": "set_code",
+          "code": "① ?\n② ?\n",
+          "say": "준비 코드를 먼저 실행해 볼게요."
+        },
+        {
+          "action": "run",
+          "expected_failure": false
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. ? / ?"
+        },
+        {
+          "action": "say",
+          "target": "editor",
+          "text": "조심하세요. 기본키 전체가 아닌 일부에 종속되면 이행이 아니라 부분 종속이에요."
+        },
+        {
+          "action": "patch_code",
+          "before": "① ?\n② ?",
+          "after": "① 부분 함수 종속\n② 2NF",
+          "say": "작은 부분을 바꿔 원리를 확인해요."
+        },
+        {
+          "action": "run"
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. 부분함수종속 / 2nf"
+        },
+        {
+          "action": "submit"
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "title": "문항 15 · 5점 · 파이썬 리스트 인자와 슬라이스",
+      "goal": "리스트에 `+=`를 쓰면 새 리스트를 만들지 않아요.\n그 이름이 가리키는 리스트 자체를 늘려요.\n다음 파이썬 프로그램의 출력을 적으세요.\n\n실행하지 말고 두 줄을 차례로 적으세요.\n\n```python\ndef grow(items, extra):\n    items += extra\n    items = items + [0]\n    items.append(9)\n    return len(items)\n\n\nnums = [1, 2]\nsize = grow(nums, [3, 4])\nprint(size, len(nums), nums[-1])\npart = nums[1:3]\npart[0] = 50\nprint(nums[1] + part[0])\n```",
+      "language": "answer",
+      "entry_file": "answer.txt",
+      "starter_code": "?\n",
+      "solution": "6 4 4\n52\n",
+      "files": {},
+      "tests": [
+        {
+          "input": "",
+          "expected": "6 4 4\n52"
+        }
+      ],
+      "web_checks": [],
+      "git_checks": null,
+      "required": true,
+      "hints": [],
+      "narration": [
+        {
+          "action": "set_code",
+          "code": "?\n",
+          "say": "준비 코드를 먼저 실행해 볼게요."
+        },
+        {
+          "action": "run",
+          "expected_failure": false
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. ?"
+        },
+        {
+          "action": "say",
+          "target": "editor",
+          "text": "조심하세요. `items + [0]`도 원래 리스트를 바꾼다고 보면 nums 길이가 틀려요."
+        },
+        {
+          "action": "patch_code",
+          "before": "?",
+          "after": "6 4 4\n52",
+          "say": "작은 부분을 바꿔 원리를 확인해요."
+        },
+        {
+          "action": "run"
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. 6 4 4 / 52"
+        },
+        {
+          "action": "submit"
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "title": "문항 16 · 5점 · SQL IS NULL과 HAVING",
+      "goal": "보너스가 아직 정해지지 않은(NULL) 직원을 부서마다 세요.\n그런 직원이 2명 이상인 부서만 cnt와 함께 보여 줘요.\n표는 `staff(id, name, dept, bonus)`예요. 보너스 0은 정해진 값이에요.\n\n지금 답안은 오류가 나요. 고칠 곳은 두 군데예요.\n`misuse of aggregate`는 집계 함수를 못 쓰는 자리라는 오류예요.\n열 이름과 정렬(부서 이름 순)은 그대로 두고 고쳐서 제출하세요.\n채점은 다른 직원 자료로도 다시 해요.",
+      "language": "sql",
+      "entry_file": "main.sql",
+      "starter_code": "-- 여기에 답안 SQL을 작성하세요.\n-- 부서마다 보너스 미정 직원 수(cnt)를 세요.\nSELECT dept, COUNT(*) AS cnt\nFROM staff\n-- 미정(NULL)인 행만 남기고, 2명 이상인 부서만 보려는 조건이에요.\nWHERE bonus = NULL AND COUNT(*) >= 2\n-- 부서마다 한 줄로 묶고, 부서 이름 순으로 보여 줘요.\nGROUP BY dept\nORDER BY dept;\n",
+      "solution": "-- 여기에 답안 SQL을 작성하세요.\n-- 부서마다 보너스 미정 직원 수(cnt)를 세요.\nSELECT dept, COUNT(*) AS cnt\nFROM staff\n-- 미정(NULL)인 행만 남기고, 2명 이상인 부서만 보려는 조건이에요.\nWHERE bonus IS NULL\n-- 부서마다 한 줄로 묶고, 부서 이름 순으로 보여 줘요.\nGROUP BY dept\nHAVING COUNT(*) >= 2\nORDER BY dept;\n",
+      "files": {
+        "setup.sql": "CREATE TABLE staff (id INTEGER PRIMARY KEY, name TEXT, dept TEXT, bonus INTEGER);\nINSERT INTO staff (id, name, dept, bonus) VALUES (1, '가은', '영업', NULL);\nINSERT INTO staff (id, name, dept, bonus) VALUES (2, '나윤', '영업', 300);\nINSERT INTO staff (id, name, dept, bonus) VALUES (3, '다혜', '영업', NULL);\nINSERT INTO staff (id, name, dept, bonus) VALUES (4, '라임', '개발', NULL);\nINSERT INTO staff (id, name, dept, bonus) VALUES (5, '마리', '개발', 0);\nINSERT INTO staff (id, name, dept, bonus) VALUES (6, '바다', '개발', NULL);\nINSERT INTO staff (id, name, dept, bonus) VALUES (7, '사랑', '개발', NULL);\nINSERT INTO staff (id, name, dept, bonus) VALUES (8, '아영', '총무', NULL);\nINSERT INTO staff (id, name, dept, bonus) VALUES (9, '자윤', '총무', 200);\nINSERT INTO staff (id, name, dept, bonus) VALUES (10, '차은', '기획', 0);\nINSERT INTO staff (id, name, dept, bonus) VALUES (11, '카이', '기획', 0);\n"
+      },
+      "tests": [
+        {
+          "input": "",
+          "expected": "dept | cnt\n개발 | 3\n영업 | 2"
+        }
+      ],
+      "web_checks": [],
+      "git_checks": null,
+      "required": true,
+      "hints": [],
+      "narration": [
+        {
+          "action": "set_code",
+          "code": "-- 여기에 답안 SQL을 작성하세요.\n-- 부서마다 보너스 미정 직원 수(cnt)를 세요.\nSELECT dept, COUNT(*) AS cnt\nFROM staff\n-- 미정(NULL)인 행만 남기고, 2명 이상인 부서만 보려는 조건이에요.\nWHERE bonus = NULL AND COUNT(*) >= 2\n-- 부서마다 한 줄로 묶고, 부서 이름 순으로 보여 줘요.\nGROUP BY dept\nORDER BY dept;\n",
+          "say": "준비 코드를 먼저 실행해 볼게요."
+        },
+        {
+          "action": "run",
+          "expected_failure": true
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "지금 코드는 검사를 통과하지 못해요."
+        },
+        {
+          "action": "say",
+          "target": "editor",
+          "text": "조심하세요. `= NULL`은 참이 안 되고, 집계 조건은 WHERE에 못 써요."
+        },
+        {
+          "action": "patch_code",
+          "before": "WHERE bonus = NULL AND COUNT(*) >= 2\n-- 부서마다 한 줄로 묶고, 부서 이름 순으로 보여 줘요.\nGROUP BY dept",
+          "after": "WHERE bonus IS NULL\n-- 부서마다 한 줄로 묶고, 부서 이름 순으로 보여 줘요.\nGROUP BY dept\nHAVING COUNT(*) >= 2",
+          "say": "작은 부분을 바꿔 원리를 확인해요."
+        },
+        {
+          "action": "run"
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. dept | cnt / 개발 | 3 / 영업 | 2"
+        },
+        {
+          "action": "submit"
+        }
+      ],
+      "variations": [
+        {
+          "values": {
+            "setup": "CREATE TABLE staff (id INTEGER PRIMARY KEY, name TEXT, dept TEXT, bonus INTEGER);\nINSERT INTO staff (id, name, dept, bonus) VALUES (1, '가온', '인사', NULL);\nINSERT INTO staff (id, name, dept, bonus) VALUES (2, '나린', '인사', NULL);\nINSERT INTO staff (id, name, dept, bonus) VALUES (3, '다솜', '인사', NULL);\nINSERT INTO staff (id, name, dept, bonus) VALUES (4, '라희', '재무', NULL);\nINSERT INTO staff (id, name, dept, bonus) VALUES (5, '마루', '재무', 100);\nINSERT INTO staff (id, name, dept, bonus) VALUES (6, '보람', '재무', NULL);\nINSERT INTO staff (id, name, dept, bonus) VALUES (7, '새봄', '홍보', 0);\nINSERT INTO staff (id, name, dept, bonus) VALUES (8, '아라', '홍보', NULL);\n"
+          },
+          "expected": "dept | cnt\n인사 | 3\n재무 | 2"
+        },
+        {
+          "values": {
+            "setup": "CREATE TABLE staff (id INTEGER PRIMARY KEY, name TEXT, dept TEXT, bonus INTEGER);\nINSERT INTO staff (id, name, dept, bonus) VALUES (1, '솔', '물류', NULL);\nINSERT INTO staff (id, name, dept, bonus) VALUES (2, '윤', '물류', NULL);\nINSERT INTO staff (id, name, dept, bonus) VALUES (3, '진', '물류', NULL);\nINSERT INTO staff (id, name, dept, bonus) VALUES (4, '한', '물류', NULL);\nINSERT INTO staff (id, name, dept, bonus) VALUES (5, '별', '법무', NULL);\nINSERT INTO staff (id, name, dept, bonus) VALUES (6, '달', '법무', 0);\nINSERT INTO staff (id, name, dept, bonus) VALUES (7, '강', '법무', 0);\nINSERT INTO staff (id, name, dept, bonus) VALUES (8, '산', '구매', NULL);\nINSERT INTO staff (id, name, dept, bonus) VALUES (9, '숲', '구매', NULL);\nINSERT INTO staff (id, name, dept, bonus) VALUES (10, '들', '구매', 500);\n"
+          },
+          "expected": "dept | cnt\n구매 | 2\n물류 | 4"
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "title": "문항 17 · 5점 · 모듈 응집도",
+      "goal": "startUp 안의 세 줄은 서로 관련 없는 일이에요.\n프로그램을 시작할 때 함께 해야 해서 한 모듈에 모았어요.\n세 줄의 순서는 바꿔도 결과가 같아요.\n\n```java\nclass Main {\n    static int visitors;\n    static String notice;\n    static double taxRate;\n\n    static void startUp() {\n        visitors = 0;\n        notice = \"\";\n        taxRate = 0.1;\n    }\n\n    public static void main(String[] args) {\n        startUp();\n        System.out.println(visitors + \" \" + taxRate);\n    }\n}\n```\n\nstartUp 모듈의 응집도 이름을 적으세요.\n한국어 이름이나 영어 이름 중 하나로 적어요.",
+      "language": "answer",
+      "entry_file": "answer.txt",
+      "starter_code": "?\n",
+      "solution": "시간적 응집도\n",
+      "files": {},
+      "tests": [
+        {
+          "input": "",
+          "expected": "시간적응집도"
+        },
+        {
+          "input": "",
+          "expected": "시간적응집"
+        },
+        {
+          "input": "",
+          "expected": "시간적"
+        },
+        {
+          "input": "",
+          "expected": "temporal cohesion"
+        },
+        {
+          "input": "",
+          "expected": "temporalcohesion"
+        },
+        {
+          "input": "",
+          "expected": "temporal"
+        }
+      ],
+      "web_checks": [],
+      "git_checks": null,
+      "required": true,
+      "hints": [],
+      "narration": [
+        {
+          "action": "set_code",
+          "code": "?\n",
+          "say": "준비 코드를 먼저 실행해 볼게요."
+        },
+        {
+          "action": "run",
+          "expected_failure": false
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. ?"
+        },
+        {
+          "action": "say",
+          "target": "editor",
+          "text": "조심하세요. 순서와 상관없이 실행 시점만 같으면 절차적이 아니라 시간적이에요."
+        },
+        {
+          "action": "patch_code",
+          "before": "?",
+          "after": "시간적 응집도",
+          "say": "작은 부분을 바꿔 원리를 확인해요."
+        },
+        {
+          "action": "run"
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. 시간적응집도"
+        },
+        {
+          "action": "submit"
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "title": "문항 18 · 5점 · 자바 static 필드",
+      "goal": "다음 자바 프로그램의 출력을 적으세요.\n\n실행하지 말고 두 줄을 차례로 적으세요.\n\n```java\nclass Ticket {\n    static int made = 0;\n    int no;\n\n    Ticket(int step) {\n        made += step;\n        no = made;\n    }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        Ticket a = new Ticket(3);\n        Ticket b = new Ticket(4);\n        a.made = a.made * 2;\n        Ticket c = new Ticket(1);\n        System.out.println(a.no + \" \" + b.no + \" \" + c.no);\n        System.out.println(a.made + c.made);\n    }\n}\n```",
+      "language": "answer",
+      "entry_file": "answer.txt",
+      "starter_code": "?\n",
+      "solution": "3 7 15\n30\n",
+      "files": {},
+      "tests": [
+        {
+          "input": "",
+          "expected": "3 7 15\n30"
+        }
+      ],
+      "web_checks": [],
+      "git_checks": null,
+      "required": true,
+      "hints": [],
+      "narration": [
+        {
+          "action": "set_code",
+          "code": "?\n",
+          "say": "준비 코드를 먼저 실행해 볼게요."
+        },
+        {
+          "action": "run",
+          "expected_failure": false
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. ?"
+        },
+        {
+          "action": "say",
+          "target": "editor",
+          "text": "조심하세요. `a.made`를 a만의 값으로 보면 c의 번호와 합이 틀려요."
+        },
+        {
+          "action": "patch_code",
+          "before": "?",
+          "after": "3 7 15\n30",
+          "say": "작은 부분을 바꿔 원리를 확인해요."
+        },
+        {
+          "action": "run"
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. 3 7 15 / 30"
+        },
+        {
+          "action": "submit"
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "title": "문항 19 · 5점 · 교착 상태 예방",
+      "goal": "교착 상태는 네 조건이 모두 있을 때 생길 수 있어요.\n네 조건은 상호 배제, 점유와 대기, 비선점, 환형 대기예요.\n조건 하나를 깨면 교착을 막아요. 이걸 예방이라고 해요.\n\n아래 방법은 각각 어느 조건을 깨나요?\n① 작업을 시작하기 전에 필요한 자원을 한꺼번에 다 받아요.\n② 자원마다 번호를 붙이고, 번호가 커지는 순서로만 요청해요.\n③ 새 자원을 바로 못 받으면, 쥐고 있던 자원을 운영체제가 거둬 가요.\n위 네 조건 이름 중에서 골라 세 줄을 차례로 적으세요. 이름 뒤에 \"조건\"은 붙이지 않아요.",
+      "language": "answer",
+      "entry_file": "answer.txt",
+      "starter_code": "① ?\n② ?\n③ ?\n",
+      "solution": "① 점유와 대기\n② 환형 대기\n③ 비선점\n",
+      "files": {},
+      "tests": [
+        {
+          "input": "",
+          "expected": "점유와대기\n환형대기\n비선점"
+        },
+        {
+          "input": "",
+          "expected": "점유와대기\n순환대기\n비선점"
+        },
+        {
+          "input": "",
+          "expected": "점유대기\n환형대기\n비선점"
+        },
+        {
+          "input": "",
+          "expected": "점유대기\n순환대기\n비선점"
+        },
+        {
+          "input": "",
+          "expected": "점유및대기\n환형대기\n비선점"
+        },
+        {
+          "input": "",
+          "expected": "점유및대기\n순환대기\n비선점"
+        }
+      ],
+      "web_checks": [],
+      "git_checks": null,
+      "required": true,
+      "hints": [],
+      "narration": [
+        {
+          "action": "set_code",
+          "code": "① ?\n② ?\n③ ?\n",
+          "say": "준비 코드를 먼저 실행해 볼게요."
+        },
+        {
+          "action": "run",
+          "expected_failure": false
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. ? / ? / ?"
+        },
+        {
+          "action": "say",
+          "target": "editor",
+          "text": "조심하세요. 미리 다 받는 방법을 비선점으로 적기 쉬워요. 쥔 채 기다리지 않게 하는 거예요."
+        },
+        {
+          "action": "patch_code",
+          "before": "① ?\n② ?\n③ ?",
+          "after": "① 점유와 대기\n② 환형 대기\n③ 비선점",
+          "say": "작은 부분을 바꿔 원리를 확인해요."
+        },
+        {
+          "action": "run"
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. 점유와대기 / 환형대기 / 비선점"
+        },
+        {
+          "action": "submit"
+        }
+      ]
+    },
+    {
+      "id": "q20",
+      "title": "문항 20 · 5점 · 배치 프로그램 필수 요소",
+      "goal": "배치 프로그램은 모아 둔 자료를 사람 손 없이 한꺼번에 처리해요.\n필수 요소는 대용량 데이터, 자동화, 견고성, 안정성(신뢰성), 성능이에요.\n\n아래 상황마다 어느 필수 요소인지 적으세요.\n① 날짜 칸이 깨진 행을 만나도 건너뛰고 끝까지 처리해요.\n② 실패한 작업이 어느 단계에서 언제 멈췄는지 추적해요.\n③ 낮 업무를 느리게 하지 않고 정한 시각 안에 끝나요.\n세 줄을 차례로 적으세요. 이름이 둘인 요소는 하나만 적어도 돼요. 마지막 문항이에요.",
+      "language": "answer",
+      "entry_file": "answer.txt",
+      "starter_code": "① ?\n② ?\n③ ?\n",
+      "solution": "① 견고성\n② 안정성\n③ 성능\n",
+      "files": {},
+      "tests": [
+        {
+          "input": "",
+          "expected": "견고성\n안정성\n성능"
+        },
+        {
+          "input": "",
+          "expected": "견고성\n신뢰성\n성능"
+        },
+        {
+          "input": "",
+          "expected": "견고성\n안정성 (신뢰성)\n성능"
+        },
+        {
+          "input": "",
+          "expected": "견고성\n안정성(신뢰성)\n성능"
+        },
+        {
+          "input": "",
+          "expected": "견고성\n안정성 / 신뢰성\n성능"
+        },
+        {
+          "input": "",
+          "expected": "견고성\n안정성 /신뢰성\n성능"
+        },
+        {
+          "input": "",
+          "expected": "견고성\n안정성/ 신뢰성\n성능"
+        },
+        {
+          "input": "",
+          "expected": "견고성\n안정성/신뢰성\n성능"
+        },
+        {
+          "input": "",
+          "expected": "견고성\n안정성 · 신뢰성\n성능"
+        },
+        {
+          "input": "",
+          "expected": "견고성\n안정성 ·신뢰성\n성능"
+        },
+        {
+          "input": "",
+          "expected": "견고성\n안정성· 신뢰성\n성능"
+        },
+        {
+          "input": "",
+          "expected": "견고성\n안정성·신뢰성\n성능"
+        }
+      ],
+      "web_checks": [],
+      "git_checks": null,
+      "required": true,
+      "hints": [],
+      "narration": [
+        {
+          "action": "set_code",
+          "code": "① ?\n② ?\n③ ?\n",
+          "say": "준비 코드를 먼저 실행해 볼게요."
+        },
+        {
+          "action": "run",
+          "expected_failure": false
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. ? / ? / ?"
+        },
+        {
+          "action": "say",
+          "target": "editor",
+          "text": "조심하세요. 견고성과 안정성을 바꿔 적기 쉬워요. 깨진 자료를 견디는 쪽이 견고성이에요."
+        },
+        {
+          "action": "patch_code",
+          "before": "① ?\n② ?\n③ ?",
+          "after": "① 견고성\n② 안정성\n③ 성능",
+          "say": "작은 부분을 바꿔 원리를 확인해요."
+        },
+        {
+          "action": "run"
+        },
+        {
+          "action": "say",
+          "target": "output",
+          "text": "실행 결과를 비교해요. 견고성 / 안정성 / 성능"
+        },
+        {
+          "action": "submit"
+        }
+      ]
+    }
+  ]
+}
